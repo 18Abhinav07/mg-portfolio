@@ -155,7 +155,7 @@ export default function HeroConstellation() {
         {/* Autoplay loop is continuous motion: suppressed under reduced motion,
             where the static gradient above stands in. */}
         {!reduceMotion && (
-          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.12]">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.28]">
             <iframe
               className="youtube-background pointer-events-none"
               src="https://www.youtube.com/embed/b1rPsrcEAjE?autoplay=1&mute=1&loop=1&playlist=b1rPsrcEAjE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1"
