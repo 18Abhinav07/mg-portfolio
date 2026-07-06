@@ -22,30 +22,65 @@ export function Preloader({ onComplete }: PreloaderProps) {
       return () => window.clearTimeout(tmo);
     }
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete,
-        delay: 0.5,
+    // Critical hero images to preload before entry
+    const assets = [
+      '/Politicians/models/mj_gautam_nobg.png',
+      '/Politicians/models/modi_nobg.png',
+      '/Politicians/models/amit_shah_nobg.png',
+      '/Politicians/models/jp_nadda_nobg.png',
+      '/Politicians/models/Dhami_nobg.png',
+      '/Politicians/models/rp_nishank_nobg.png'
+    ].map(path => {
+      const clean = path.startsWith('/') ? path.slice(1) : path;
+      return `${import.meta.env.BASE_URL}${clean}`;
+    });
+
+    let isCancelled = false;
+    let ctx: gsap.Context | null = null;
+
+    const preloadAll = async () => {
+      const promises = assets.map(src => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => resolve();
+          img.onerror = () => resolve(); // Fallback: resolve anyway to avoid freeze on network drop
+        });
       });
 
-      // Text fade in
-      tl.from(textRef.current, {
-        y: 20,
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out"
-      })
-      // Hold for experience
-      .to({}, { duration: 1.5 })
-      // Container fade out
-      .to(containerRef.current, {
-        opacity: 0,
-        duration: 0.8,
-        ease: "power2.inOut"
-      });
-    }, containerRef);
+      await Promise.all(promises);
 
-    return () => ctx.revert();
+      if (!isCancelled) {
+        ctx = gsap.context(() => {
+          const tl = gsap.timeline({
+            onComplete,
+          });
+
+          // Text fade in
+          tl.from(textRef.current, {
+            y: 20,
+            opacity: 0,
+            duration: 1,
+            ease: "power2.out"
+          })
+          // Hold for experience
+          .to({}, { duration: 1.5 })
+          // Container fade out
+          .to(containerRef.current, {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.inOut"
+          });
+        }, containerRef);
+      }
+    };
+
+    preloadAll();
+
+    return () => {
+      isCancelled = true;
+      if (ctx) ctx.revert();
+    };
   }, [onComplete]);
 
   return (

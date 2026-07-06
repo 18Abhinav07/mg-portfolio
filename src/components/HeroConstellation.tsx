@@ -24,6 +24,10 @@ gsap.registerPlugin(ScrollTrigger);
  */
 export default function HeroConstellation() {
   const { t, lang } = useLanguage();
+  const baseAsset = (path: string) => {
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    return `${import.meta.env.BASE_URL}${cleanPath}`;
+  };
   const rootRef = useRef<HTMLElement>(null);
 
   const shahRef = useRef<HTMLImageElement>(null);
@@ -159,7 +163,7 @@ export default function HeroConstellation() {
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
           >
-            <source src="/hero/loop.mp4" type="video/mp4" />
+            <source src={baseAsset('/hero/loop.mp4')} type="video/mp4" />
           </video>
         )}
 
@@ -179,37 +183,37 @@ export default function HeroConstellation() {
             stack over the solo layer. */}
         {!reduceMotion && (
           <>
-        <img
+         <img
           ref={naddaRef}
-          src="/Politicians/models/jp_nadda_nobg.png"
+          src={baseAsset('/Politicians/models/jp_nadda_nobg.png')}
           alt="JP Nadda"
           className="absolute bottom-0 left-[-4%] z-[24] hidden h-[40vh] w-auto object-contain sm:block md:h-[44vh]"
           style={{ filter: 'brightness(0.94)' }}
         />
         <img
           ref={shahRef}
-          src="/Politicians/models/amit_shah_nobg.png"
+          src={baseAsset('/Politicians/models/amit_shah_nobg.png')}
           alt="Amit Shah"
           className="absolute bottom-0 left-[8%] z-[23] h-[45vh] w-auto object-contain md:h-[49vh]"
           style={{ filter: 'brightness(0.97)' }}
         />
         <img
           ref={modiRef}
-          src="/Politicians/models/modi_nobg.png"
+          src={baseAsset('/Politicians/models/modi_nobg.png')}
           alt="Narendra Modi"
           className="absolute bottom-0 left-[19%] z-[28] h-[52vh] w-auto object-contain md:h-[56vh]"
           style={{ filter: 'brightness(1)' }}
         />
         <img
           ref={dhamiRef}
-          src="/Politicians/models/Dhami_nobg.png"
+          src={baseAsset('/Politicians/models/Dhami_nobg.png')}
           alt="Pushkar Singh Dhami"
           className="absolute bottom-0 left-[37%] z-[24] h-[45vh] w-auto object-contain md:h-[49vh]"
           style={{ filter: 'brightness(0.97)' }}
         />
         <img
           ref={nishankRef}
-          src="/Politicians/models/rp_nishank_nobg.png"
+          src={baseAsset('/Politicians/models/rp_nishank_nobg.png')}
           alt="Ramesh Pokhriyal Nishank"
           className="absolute bottom-0 left-[48%] z-[22] hidden h-[40vh] w-auto object-contain sm:block md:h-[44vh]"
           style={{ filter: 'brightness(0.94)' }}
@@ -220,7 +224,7 @@ export default function HeroConstellation() {
         <div className="absolute bottom-0 right-[2%] z-30">
           <img
             ref={ensembleMgRef}
-            src="/Politicians/models/mj_gautam_nobg.png"
+            src={baseAsset('/Politicians/models/mj_gautam_nobg.png')}
             alt="Manoj Kumar Gautam"
             decoding="async"
             className="h-[68vh] w-auto object-contain md:h-[74vh]"
@@ -241,7 +245,7 @@ export default function HeroConstellation() {
               style={{ willChange: 'transform', opacity: reduceMotion ? 1 : 0 }}
             >
               <img
-                src="/Politicians/models/mj_gautam_nobg.png"
+                src={baseAsset('/Politicians/models/mj_gautam_nobg.png')}
                 alt="Manoj Kumar Gautam"
                 decoding="async"
                 className="h-[80vh] w-auto object-contain md:h-[88vh]"
