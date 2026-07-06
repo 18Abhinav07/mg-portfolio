@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slateWhite text-parliament antialiased font-sans;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  .lotus-loader path {
+    fill: none;
+    stroke: #ff9933;
+    stroke-width: 85;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw-lotus 4.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(255,153,51,0.55));
+  }
+}
+
+@keyframes draw-lotus {
+  0%   { stroke-dashoffset: 1000; }
+  45%  { stroke-dashoffset: 0; }
+  55%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -1000; }
+}
