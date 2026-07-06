@@ -115,7 +115,7 @@ export function About() {
                 </DoubleBezelCard>
               </div>
               <blockquote ref={quoteRef} className="relative mt-8 border-l-2 border-saffron/60 pl-6 italic">
-                <p className="text-pretty font-hindi text-xl leading-relaxed text-parliament/90">
+                <p className="text-pretty font-hindiSerif text-xl leading-relaxed text-parliament/90">
                   {a.quote}
                 </p>
                 <figcaption className={cn(
@@ -142,14 +142,14 @@ export function About() {
 
             <dl
               ref={chipsRef}
-              className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2"
+              className="mt-10 grid grid-cols-2 gap-3 sm:gap-4"
             >
               {a.chips.map((chip) => (
                 <div
                   key={chip.label}
                   className={cn(
-                    "bg-white border border-black/[0.04] p-5 rounded-2xl transition-all duration-300 hover:border-saffron/20 hover:shadow-[0_4px_20px_rgba(255,107,0,0.03)]",
-                    (chip.label === 'पता' || chip.label === 'Address' || chip.label === 'संकल्प' || chip.label === 'Resolve' || chip.label === 'दायित्व' || chip.label === 'Role') && "sm:col-span-2"
+                    "bg-white border border-black/[0.04] p-4 sm:p-5 rounded-2xl transition-all duration-300 hover:border-saffron/20 hover:shadow-[0_4px_20px_rgba(255,107,0,0.03)]",
+                    (chip.label === 'पता' || chip.label === 'Address' || chip.label === 'संकल्प' || chip.label === 'Resolve' || chip.label === 'दायित्व' || chip.label === 'Role') ? "col-span-2" : "col-span-1"
                   )}
                 >
                   <dt className={cn(

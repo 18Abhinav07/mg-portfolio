@@ -77,7 +77,7 @@ function ExplorePanel({
           </div>
           <div className="flex flex-1 flex-col gap-5 p-7">
             <div>
-              <h3 className="text-balance font-hindi text-2xl font-bold leading-tight text-parliament">
+              <h3 className="text-balance font-hindiSerif text-2xl font-bold leading-tight text-parliament">
                 {card.title}
               </h3>
               <p className="mt-2 max-w-prose text-pretty font-hindi leading-relaxed text-parliament/70">
@@ -111,7 +111,7 @@ function ExploreWide({ to, card, code, panelRef }: { to: string; card: ExploreCa
           </div>
           <div className="flex flex-col justify-center gap-5 p-7 md:p-10">
             <div>
-              <h3 className="text-balance font-hindi text-2xl font-bold leading-tight text-parliament md:text-3xl">
+              <h3 className="text-balance font-hindiSerif text-2xl font-bold leading-tight text-parliament md:text-3xl">
                 {card.title}
               </h3>
               <p className="mt-2 max-w-md text-pretty font-hindi leading-relaxed text-parliament/70">

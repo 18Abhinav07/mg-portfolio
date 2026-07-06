@@ -9,6 +9,7 @@ export default {
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
         hindi: ['Yantramanav', 'sans-serif'],
+        hindiSerif: ['Martel', 'serif'],
       },
       colors: {
         slateWhite: '#F8F9FA',

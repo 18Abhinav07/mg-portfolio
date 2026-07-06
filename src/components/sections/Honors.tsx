@@ -156,7 +156,7 @@ export function Honors() {
           <span className="block font-sans text-xs font-bold uppercase tracking-[0.25em] text-slateWhite/90">
             {h.eyebrow}
           </span>
-          <h2 className="mt-4 font-hindi text-[clamp(2rem,4.5vw,3.4rem)] font-bold leading-[1.08] text-balance">
+          <h2 className="mt-4 font-hindiSerif text-[clamp(2.1rem,4.5vw,3.4rem)] font-extrabold leading-[1.08] text-balance">
             {h.title}
           </h2>
           <p className="mt-5 font-hindi text-lg leading-relaxed text-slateWhite/90">{h.intro}</p>
@@ -186,7 +186,7 @@ export function Honors() {
                 </span>
               </div>
               <div data-honor-body>
-                <h3 className="font-hindi text-xl font-bold leading-tight md:text-2xl">{item.title}</h3>
+                <h3 className="font-hindiSerif text-xl font-bold leading-tight md:text-2xl">{item.title}</h3>
                 <p className="mt-1.5 font-hindi text-slateWhite/90">{item.org}</p>
               </div>
               {/* Closing rule under the final honor, so the list reads as bounded. */}

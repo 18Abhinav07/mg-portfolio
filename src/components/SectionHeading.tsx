@@ -85,7 +85,7 @@ export function SectionHeading({ eyebrow, title, intro, center, tone = 'light', 
       <h2
         ref={titleRef}
         className={cn(
-          'mt-4 font-hindi font-bold leading-[1.08] text-[clamp(2rem,4.5vw,3.4rem)]',
+          'mt-4 font-hindiSerif font-extrabold leading-[1.08] text-[clamp(2.1rem,4.5vw,3.4rem)]',
           tone === 'dark' ? 'text-slateWhite' : 'text-parliament',
         )}
       >

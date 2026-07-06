@@ -23,7 +23,7 @@ export function Videos() {
             "font-sans text-xs font-bold uppercase text-saffron",
             lang === 'en' ? "tracking-[0.28em]" : "tracking-normal"
           )}>{t.nav.videos}</span>
-          <h1 className="mt-4 font-hindi text-[clamp(2.2rem,5vw,3.6rem)] font-bold leading-[1.08] text-parliament">
+          <h1 className="mt-4 font-hindiSerif text-[clamp(2.2rem,5vw,3.6rem)] font-extrabold leading-[1.08] text-parliament">
             {v.title}
           </h1>
           <p className="mt-4 max-w-2xl font-hindi text-lg leading-relaxed text-parliament/65">{v.intro}</p>
@@ -41,7 +41,7 @@ export function Videos() {
               )}>
                 {v.featuredLabel}
               </span>
-              <h2 className="font-hindi text-3xl font-bold text-parliament">{featured.title}</h2>
+              <h2 className="font-hindiSerif text-3xl font-bold text-parliament">{featured.title}</h2>
               <div className="flex items-center gap-3 font-sans text-sm text-parliament/75">
                 <span>{featured.category}</span>
                 <span className="h-1 w-1 rounded-full bg-parliament/30" />
@@ -61,7 +61,7 @@ export function Videos() {
                     {item.duration}
                   </span>
                 </div>
-                <h3 className="mt-3 font-hindi text-lg font-bold text-parliament transition-colors duration-300 group-hover:text-saffron">
+                <h3 className="mt-3 font-hindiSerif text-lg font-bold text-parliament transition-colors duration-300 group-hover:text-saffron">
                   {item.title}
                 </h3>
                 <p className={cn(

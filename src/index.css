@@ -35,8 +35,36 @@
 }
 
 @keyframes draw-lotus {
-  0%   { stroke-dashoffset: 1000; }
-  45%  { stroke-dashoffset: 0; }
-  55%  { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -1000; }
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+    filter: drop-shadow(0 0 2px rgba(255,153,51,0.2));
+  }
+  8% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(255,153,51,0.55));
+  }
+  40% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(255,153,51,0.55));
+  }
+  57% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 14px rgba(255,153,51,0.85));
+  }
+  75% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(255,153,51,0.55));
+  }
+  92% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 0 2px rgba(255,153,51,0.2));
+  }
+  100% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
 }

@@ -119,7 +119,7 @@ export function Seva() {
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <div data-seva-body>
-                  <h3 className="font-hindi text-2xl font-bold leading-tight text-parliament">{area.title}</h3>
+                  <h3 className="font-hindiSerif text-2xl font-bold leading-tight text-parliament">{area.title}</h3>
                   <p className="mt-2 max-w-[38rem] font-hindi leading-relaxed text-parliament/70">{area.desc}</p>
                 </div>
               </div>

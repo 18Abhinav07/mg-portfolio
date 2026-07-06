@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { SectionHeading } from '../SectionHeading';
 import { cn } from '../../utils/cn';
+import { Copy } from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,15 @@ export function Journey() {
   const { t, lang } = useLanguage();
   const j = t.journey;
   const [tab, setTab] = useState<'rss' | 'political'>('rss');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (year: string, title: string, desc: string, id: string) => {
+    const textToCopy = `${year}: ${title}\n${desc}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  };
   
   const railRef = useRef<HTMLSpanElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -138,18 +148,37 @@ export function Journey() {
             className="absolute left-1 top-2 bottom-2 w-0.5 origin-top rounded-full bg-gradient-to-b from-saffron via-saffron/70 to-transparent"
           />
           <ol ref={listRef} className="space-y-14">
-            {milestones.map((m) => (
-              <li key={m.year + m.title} className="relative">
-                <span
-                  data-journey-dot
-                  aria-hidden="true"
-                  className="absolute -left-9 top-[0.4rem] h-2.5 w-2.5 rounded-full bg-saffron ring-4 ring-saffron/25 md:-left-12"
-                />
-                <p data-journey-year className="font-sans text-sm font-bold uppercase tracking-[0.22em] tabular-nums text-saffron">{m.year}</p>
-                <h3 data-journey-title className="mt-2.5 font-hindi text-2xl font-bold leading-tight text-slateWhite">{m.title}</h3>
-                <p data-journey-desc className="mt-2.5 max-w-[42rem] font-hindi leading-relaxed text-slateWhite/70">{m.desc}</p>
-              </li>
-            ))}
+            {milestones.map((m) => {
+              const itemKey = m.year + m.title;
+              return (
+                <li key={itemKey} className="group relative pr-12">
+                  <span
+                    data-journey-dot
+                    aria-hidden="true"
+                    className="absolute -left-9 top-[0.4rem] h-2.5 w-2.5 rounded-full bg-saffron ring-4 ring-saffron/25 md:-left-12"
+                  />
+                  <div>
+                    <p data-journey-year className="font-sans text-sm font-bold uppercase tracking-[0.22em] tabular-nums text-saffron">{m.year}</p>
+                    <h3 data-journey-title className="mt-2.5 font-hindiSerif text-2xl font-bold leading-tight text-slateWhite">{m.title}</h3>
+                    <p data-journey-desc className="mt-2.5 max-w-[42rem] font-hindi leading-relaxed text-slateWhite/70">{m.desc}</p>
+                  </div>
+                  <button
+                    onClick={() => handleCopy(m.year, m.title, m.desc, itemKey)}
+                    className="absolute right-0 top-0.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all duration-300 inline-flex items-center justify-center p-2 rounded-lg bg-slateWhite/5 border border-slateWhite/10 text-slateWhite/50 hover:text-white hover:bg-slateWhite/10 hover:border-saffron/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+                    title={lang === 'hi' ? 'विवरण कॉपी करें' : 'Copy details'}
+                    aria-label={lang === 'hi' ? 'विवरण कॉपी करें' : 'Copy details'}
+                  >
+                    {copiedId === itemKey ? (
+                      <span className="text-xs font-bold text-saffron font-sans">
+                        {lang === 'hi' ? 'कॉपी!' : 'Copied!'}
+                      </span>
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </button>
+                </li>
+              );
+            })}
           </ol>
         </div>
       </div>

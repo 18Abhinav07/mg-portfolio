@@ -63,7 +63,7 @@ export function Gallery() {
             "font-sans text-xs font-bold uppercase text-saffron",
             lang === 'en' ? "tracking-[0.28em]" : "tracking-normal"
           )}>{t.nav.gallery}</span>
-          <h1 className="mt-4 font-hindi text-[clamp(2.2rem,5vw,3.6rem)] font-bold leading-[1.08] text-parliament">
+          <h1 className="mt-4 font-hindiSerif text-[clamp(2.2rem,5vw,3.6rem)] font-extrabold leading-[1.08] text-parliament">
             {g.title}
           </h1>
           <p className="mt-4 max-w-2xl font-hindi text-lg leading-relaxed text-parliament/65">{g.intro}</p>
