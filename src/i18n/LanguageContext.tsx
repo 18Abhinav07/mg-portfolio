@@ -43,6 +43,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
+// Context hooks intentionally live beside their provider in this small app.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useLanguage(): LanguageValue {
   const ctx = useContext(LanguageContext);
   if (!ctx) throw new Error('useLanguage must be used within LanguageProvider');

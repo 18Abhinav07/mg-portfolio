@@ -55,7 +55,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
         window.location.pathname === '/mg-portfolio/';
 
       const videoPromise = new Promise<void>((resolve) => {
-        if (!isHomepage || (window as any).__videoReady) {
+        if (!isHomepage || (window as Window & { __videoReady?: boolean }).__videoReady) {
           resolve();
           return;
         }

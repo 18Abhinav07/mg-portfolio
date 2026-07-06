@@ -50,13 +50,40 @@ export default function HeroConstellation() {
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
+  const [isCompactHero, setIsCompactHero] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 1023px)').matches,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1023px)');
+    const updateCompactHero = () => setIsCompactHero(media.matches);
+
+    updateCompactHero();
+    media.addEventListener('change', updateCompactHero);
+
+    return () => media.removeEventListener('change', updateCompactHero);
+  }, []);
 
   useEffect(() => {
     // Reduced motion: no scroll choreography. Collapse the scroll track and
-    // present the solo portrait + intro as a static, fully-visible hero.
-    if (reduceMotion) {
-      if (rootRef.current) rootRef.current.style.height = '100dvh';
-      return;
+    // present the solo portrait + intro as a static, fully-visible hero. Mobile
+    // uses the same State-B-first composition because the ensemble frame is too
+    // cramped for a phone viewport.
+    if (reduceMotion || isCompactHero) {
+      if (rootRef.current) rootRef.current.style.height = '100svh';
+      const ctx = gsap.context(() => {
+        gsap.set(portraitRef.current, { xPercent: 0, yPercent: 0, opacity: 1 });
+        gsap.set(introRef.current, { xPercent: 0, yPercent: 0, opacity: 1 });
+        gsap.set(ruleRef.current, { scaleX: 1 });
+      }, rootRef);
+
+      return () => ctx.revert();
+    }
+
+    if (rootRef.current) {
+      rootRef.current.style.height = '';
     }
 
     const ctx = gsap.context(() => {
@@ -107,10 +134,18 @@ export default function HeroConstellation() {
       tl.to(ensembleMgRef.current, { xPercent: 70, opacity: 0, ease: 'power2.in' }, 0);
 
       // Solo MG portrait slides in from the left.
-      tl.to(portraitRef.current, { xPercent: 0, opacity: 1, ease: 'power3.out' }, 0.28);
+      tl.to(
+        portraitRef.current,
+        { xPercent: 0, yPercent: 0, opacity: 1, ease: 'power3.out' },
+        0.28,
+      );
 
       // Intro resolves alongside.
-      tl.to(introRef.current, { xPercent: 0, opacity: 1, ease: 'power3.out' }, 0.46);
+      tl.to(
+        introRef.current,
+        { xPercent: 0, yPercent: 0, opacity: 1, ease: 'power3.out' },
+        0.46,
+      );
 
       // Saffron rule draws left-to-right after the intro panel has resolved.
       gsap.fromTo(
@@ -133,10 +168,10 @@ export default function HeroConstellation() {
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
         if (data && data.event === 'onReady') {
-          (window as any).__videoReady = true;
+          (window as Window & { __videoReady?: boolean }).__videoReady = true;
           window.dispatchEvent(new CustomEvent('video-ready'));
         }
-      } catch (err) {
+      } catch {
         // Ignore non-JSON messages
       }
     };
@@ -151,11 +186,11 @@ export default function HeroConstellation() {
       window.removeEventListener('load', refresh);
       ctx.revert();
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, isCompactHero]);
 
   return (
-    <section ref={rootRef} className="relative w-full h-[260vh]">
-      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-slateWhite">
+    <section ref={rootRef} className="relative w-full h-[100svh] lg:h-[260vh]">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-slateWhite lg:h-[100dvh]">
 
         {/* ---- Background: looping campaign film (custom asset later) ---- */}
         {/* Light studio gradient — also the no-video fallback. */}
@@ -166,9 +201,9 @@ export default function HeroConstellation() {
               'radial-gradient(120% 90% at 50% 4%, #FCFCFD 0%, #F8F9FA 52%, #e9edf1 100%)',
           }}
         />
-        {/* Autoplay loop is continuous motion: suppressed under reduced motion,
-            where the static gradient above stands in. */}
-        {!reduceMotion && (
+        {/* Autoplay loop is continuous motion: suppressed under reduced motion
+            and compact mobile, where the static gradient above stands in. */}
+        {!reduceMotion && !isCompactHero && (
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.28]">
             <iframe
               className="youtube-background pointer-events-none"
@@ -192,44 +227,43 @@ export default function HeroConstellation() {
             Nadda, Shah, Modi (front-center), Dhami, Nishank.
             Right: MG, prominent and saffron-rimmed, the star of the frame.
 
-            Only rendered with motion: the static reduced-motion hero resolves
-            to State-B (solo portrait + intro), so this ensemble does not
-            stack over the solo layer. */}
-        {!reduceMotion && (
+            Only rendered on non-compact motion-capable screens. Mobile starts
+            directly at State-B because the ensemble frame is cramped there. */}
+        {!reduceMotion && !isCompactHero && (
           <>
          <img
           ref={naddaRef}
           src={baseAsset('/Politicians/models/jp_nadda_nobg.png')}
           alt="JP Nadda"
-          className="absolute bottom-0 left-[-4%] z-[24] hidden h-[40vh] w-auto object-contain sm:block md:h-[44vh]"
+          className="absolute bottom-0 left-[-4%] z-[24] hidden h-[40vh] w-auto object-contain lg:block lg:h-[44vh]"
           style={{ filter: 'brightness(0.94)' }}
         />
         <img
           ref={shahRef}
           src={baseAsset('/Politicians/models/amit_shah_nobg.png')}
           alt="Amit Shah"
-          className="absolute bottom-0 left-[8%] z-[23] h-[45vh] w-auto object-contain md:h-[49vh]"
+          className="absolute bottom-0 left-[8%] z-[23] hidden h-[45vh] w-auto object-contain lg:block lg:h-[49vh]"
           style={{ filter: 'brightness(0.97)' }}
         />
         <img
           ref={modiRef}
           src={baseAsset('/Politicians/models/modi_nobg.png')}
           alt="Narendra Modi"
-          className="absolute bottom-0 left-[19%] z-[28] h-[52vh] w-auto object-contain md:h-[56vh]"
+          className="absolute bottom-0 left-[19%] z-[28] hidden h-[52vh] w-auto object-contain lg:block lg:h-[56vh]"
           style={{ filter: 'brightness(1)' }}
         />
         <img
           ref={dhamiRef}
           src={baseAsset('/Politicians/models/Dhami_nobg.png')}
           alt="Pushkar Singh Dhami"
-          className="absolute bottom-0 left-[37%] z-[24] h-[45vh] w-auto object-contain md:h-[49vh]"
+          className="absolute bottom-0 left-[37%] z-[24] hidden h-[45vh] w-auto object-contain lg:block lg:h-[49vh]"
           style={{ filter: 'brightness(0.97)' }}
         />
         <img
           ref={nishankRef}
           src={baseAsset('/Politicians/models/rp_nishank_nobg.png')}
           alt="Ramesh Pokhriyal Nishank"
-          className="absolute bottom-0 left-[48%] z-[22] hidden h-[40vh] w-auto object-contain sm:block md:h-[44vh]"
+          className="absolute bottom-0 left-[48%] z-[22] hidden h-[40vh] w-auto object-contain lg:block lg:h-[44vh]"
           style={{ filter: 'brightness(0.94)' }}
         />
 
@@ -241,7 +275,7 @@ export default function HeroConstellation() {
             src={baseAsset('/Politicians/models/mj_gautam_nobg.png')}
             alt="Manoj Kumar Gautam"
             decoding="async"
-            className="h-[68vh] w-auto object-contain md:h-[74vh]"
+            className="h-[54svh] w-auto object-contain sm:h-[62vh] lg:h-[74vh]"
             style={{ filter: 'drop-shadow(0 0 38px rgba(255,107,0,0.34)) brightness(1.06)' }}
           />
         </div>
@@ -255,14 +289,14 @@ export default function HeroConstellation() {
             {/* Solo portrait is size-controlled by the image; GSAP ref goes here */}
             <div
               ref={portraitRef}
-              className="absolute bottom-0 left-4 md:left-8 pointer-events-auto"
-              style={{ willChange: 'transform', opacity: reduceMotion ? 1 : 0 }}
+              className="absolute bottom-0 left-3 pointer-events-auto sm:left-4 md:left-8"
+              style={{ willChange: 'transform', opacity: reduceMotion || isCompactHero ? 1 : 0 }}
             >
               <img
                 src={baseAsset('/Politicians/models/mj_gautam_nobg.png')}
                 alt="Manoj Kumar Gautam"
                 decoding="async"
-                className="h-[80vh] w-auto object-contain md:h-[88vh]"
+                className="h-[56svh] sm:h-[62svh] lg:h-[88vh] w-auto object-contain"
                 style={{ filter: 'drop-shadow(0 0 46px rgba(255,107,0,0.4)) brightness(1.06)' }}
               />
             </div>
@@ -271,29 +305,29 @@ export default function HeroConstellation() {
 
         {/* Outer text overlay container */}
         <div className="absolute inset-0 z-40 pointer-events-none">
-          <div className="relative max-w-7xl mx-auto h-full w-full px-4 md:px-8 flex items-end justify-end pb-[12%] md:items-center md:pb-0">
+          <div className="relative max-w-7xl mx-auto h-full w-full px-4 md:px-8 flex items-start justify-start pt-24 sm:pt-28 lg:items-center lg:justify-end lg:pt-0 lg:pb-0">
             {/* Text block is width-constrained; GSAP ref goes here */}
             <div
               ref={introRef}
-              className="max-w-[88%] sm:max-w-[460px] pointer-events-auto"
-              style={{ willChange: 'transform', opacity: reduceMotion ? 1 : 0 }}
+              className="max-w-[21rem] pointer-events-auto sm:max-w-[460px]"
+              style={{ willChange: 'transform', opacity: reduceMotion || isCompactHero ? 1 : 0 }}
             >
               <p className={cn(
-                "font-sans text-sm font-bold uppercase text-saffron md:text-base",
+                "font-sans text-xs font-bold uppercase text-saffron sm:text-sm md:text-base",
                 lang === 'en' ? "tracking-[0.18em]" : "tracking-normal"
               )}>
                 {t.hero.party}
               </p>
-              <h1 className="mt-3 font-hindi text-[clamp(2.5rem,6vw,4.75rem)] font-bold leading-[1.05] text-parliament">
+              <h1 className="mt-3 font-hindi text-[clamp(2rem,9vw,4.75rem)] font-bold leading-[1.04] text-parliament md:leading-[1.05]">
                 {t.hero.nameLine1}
                 <br />
                 {t.hero.nameLine2}
               </h1>
               <div ref={ruleRef} className="mt-4 h-[3px] w-16 rounded-full bg-saffron" />
-              <p className="mt-4 font-hindi text-lg text-parliament/80 md:text-xl">
+              <p className="mt-4 font-hindi text-base text-parliament/80 md:text-xl">
                 {t.hero.constituency}
               </p>
-              <p className="mt-3 max-w-sm font-hindi text-sm text-parliament/70 md:text-base">
+              <p className="mt-3 max-w-[18rem] font-hindi text-sm text-parliament/70 sm:max-w-sm md:text-base">
                 {t.hero.tagline}
               </p>
             </div>
@@ -301,8 +335,9 @@ export default function HeroConstellation() {
         </div>
 
         {/* Scroll cue — gentle GSAP idle float, fades on first scroll. Hidden
-            under reduced motion, where there is no scroll choreography. */}
-        {!reduceMotion && (
+            under reduced motion and compact mobile, where there is no scroll
+            choreography. */}
+        {!reduceMotion && !isCompactHero && (
           <div
             ref={cueRef}
             className="absolute bottom-6 left-1/2 z-40 -translate-x-1/2 text-parliament/45"

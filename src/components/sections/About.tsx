@@ -100,11 +100,11 @@ export function About() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="about" className="relative w-full scroll-mt-24 bg-slateWhite py-24 md:py-36">
+    <section ref={sectionRef} id="about" className="relative w-full scroll-mt-24 bg-slateWhite py-16 md:py-36">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div ref={portraitColRef} className="lg:col-span-5">
-            <figure className="group">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div ref={portraitColRef} className="order-2 lg:order-1 lg:col-span-5">
+            <figure className="group mx-auto max-w-[22rem] lg:max-w-none">
               <div ref={portraitRef}>
                 <DoubleBezelCard className="transition-shadow duration-500 ease-spring group-hover:shadow-md">
                   <div className="aspect-[4/5] w-full overflow-hidden">
@@ -114,8 +114,8 @@ export function About() {
                   </div>
                 </DoubleBezelCard>
               </div>
-              <blockquote ref={quoteRef} className="relative mt-8 border-l-2 border-saffron/60 pl-6 italic">
-                <p className="text-pretty font-hindiSerif text-xl leading-relaxed text-parliament/90">
+              <blockquote ref={quoteRef} className="relative mt-5 border-l-2 border-saffron/60 pl-5 italic lg:mt-8 lg:pl-6">
+                <p className="text-pretty font-hindiSerif text-lg leading-relaxed text-parliament/90 md:text-xl">
                   {a.quote}
                 </p>
                 <figcaption className={cn(
@@ -128,11 +128,11 @@ export function About() {
             </figure>
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="order-1 lg:order-2 lg:col-span-7">
             <SectionHeading eyebrow={a.eyebrow} title={a.title} />
 
-            <div ref={textRef} className="mt-8 max-w-[44rem] space-y-5">
-              <p className="text-pretty font-hindi text-xl leading-relaxed text-parliament/90">{a.lead}</p>
+            <div ref={textRef} className="mt-6 max-w-[44rem] space-y-4 md:mt-8 md:space-y-5">
+              <p className="text-pretty font-hindi text-lg leading-relaxed text-parliament/90 md:text-xl">{a.lead}</p>
               {a.body.map((para, i) => (
                 <p key={i} className="text-pretty font-hindi text-base leading-relaxed text-parliament/75">
                   {para}
@@ -142,14 +142,14 @@ export function About() {
 
             <dl
               ref={chipsRef}
-              className="mt-10 grid grid-cols-2 gap-3 sm:gap-4"
+              className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:mt-10"
             >
               {a.chips.map((chip) => (
                 <div
                   key={chip.label}
                   className={cn(
                     "bg-white border border-black/[0.04] p-4 sm:p-5 rounded-2xl transition-all duration-300 hover:border-saffron/20 hover:shadow-[0_4px_20px_rgba(255,107,0,0.03)]",
-                    (chip.label === 'पता' || chip.label === 'Address' || chip.label === 'संकल्प' || chip.label === 'Resolve' || chip.label === 'दायित्व' || chip.label === 'Role') ? "col-span-2" : "col-span-1"
+                    (chip.label === 'पता' || chip.label === 'Address' || chip.label === 'संकल्प' || chip.label === 'Resolve' || chip.label === 'दायित्व' || chip.label === 'Role') ? "sm:col-span-2" : "sm:col-span-1"
                   )}
                 >
                   <dt className={cn(
