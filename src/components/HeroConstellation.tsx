@@ -155,16 +155,16 @@ export default function HeroConstellation() {
         {/* Autoplay loop is continuous motion: suppressed under reduced motion,
             where the static gradient above stands in. */}
         {!reduceMotion && (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-[0.12]"
-          >
-            <source src={baseAsset('/hero/loop.mp4')} type="video/mp4" />
-          </video>
+          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.12]">
+            <iframe
+              className="youtube-background pointer-events-none"
+              src="https://www.youtube.com/embed/b1rPsrcEAjE?autoplay=1&mute=1&loop=1&playlist=b1rPsrcEAjE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1"
+              title="BJP Campaign Loop"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
         )}
 
         {/* Grounded floor — soft shadow line so figures stand, not float. */}
