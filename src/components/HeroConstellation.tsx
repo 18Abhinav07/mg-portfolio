@@ -129,11 +129,25 @@ export default function HeroConstellation() {
       );
     }, rootRef);
 
+    const handleYoutubeMessage = (e: MessageEvent) => {
+      try {
+        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        if (data && data.event === 'onReady') {
+          (window as any).__videoReady = true;
+          window.dispatchEvent(new CustomEvent('video-ready'));
+        }
+      } catch (err) {
+        // Ignore non-JSON messages
+      }
+    };
+    window.addEventListener('message', handleYoutubeMessage);
+
     // Big MG cutout loads after init; recompute trigger bounds when it lands.
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener('load', refresh);
 
     return () => {
+      window.removeEventListener('message', handleYoutubeMessage);
       window.removeEventListener('load', refresh);
       ctx.revert();
     };

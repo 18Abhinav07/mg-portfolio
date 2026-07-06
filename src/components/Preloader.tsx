@@ -39,7 +39,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     let ctx: gsap.Context | null = null;
 
     const preloadAll = async () => {
-      const promises = assets.map(src => {
+      const imgPromises = assets.map(src => {
         return new Promise<void>((resolve) => {
           const img = new Image();
           img.src = src;
@@ -48,7 +48,33 @@ export function Preloader({ onComplete }: PreloaderProps) {
         });
       });
 
-      await Promise.all(promises);
+      // Video preloading wait (only on homepage, with a 4s fail-safe)
+      const isHomepage = 
+        window.location.pathname === '/' || 
+        window.location.pathname === '/mg-portfolio' || 
+        window.location.pathname === '/mg-portfolio/';
+
+      const videoPromise = new Promise<void>((resolve) => {
+        if (!isHomepage || (window as any).__videoReady) {
+          resolve();
+          return;
+        }
+
+        const tmo = setTimeout(() => {
+          window.removeEventListener('video-ready', onReady);
+          resolve();
+        }, 4000);
+
+        function onReady() {
+          clearTimeout(tmo);
+          window.removeEventListener('video-ready', onReady);
+          resolve();
+        }
+
+        window.addEventListener('video-ready', onReady);
+      });
+
+      await Promise.all([...imgPromises, videoPromise]);
 
       if (!isCancelled) {
         ctx = gsap.context(() => {
